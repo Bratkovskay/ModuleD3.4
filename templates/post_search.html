@@ -1,0 +1,46 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+
+{% block title %}
+    PostSearch
+{% endblock title %}
+
+
+{% block content %}
+
+<h1>Поиск новостей</h1>
+<h3>(всего новостей: {{ posts|length }})</h3>
+<form method='GET'>
+    {{ filter.form }}
+    <input class="btn btn-primary" type='submit' value='Найти'>
+</form>
+<table>
+    <thead>
+        <th>
+            Заголовок
+        </th>
+        <th>
+            Дата публикации
+        </th>
+        <th>
+            Содержание
+        </th>
+    </thead>
+    {% for post in filter.qs %}
+        <tr>
+            <td>
+                <a href="{{ post.get_absolute_url }}">{{ post.title|censor }}</a>                
+            </td>
+            <td>
+                {{ post.dateCreation|date:'d.m.Y' }}
+            </td>
+            <td>
+                {{ post.text|truncatechars:50|censor }}
+            </td>
+        </tr>
+    {% endfor %}
+
+{% endblock content %}
+
+
