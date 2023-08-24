@@ -26,8 +26,23 @@ SECRET_KEY = 'django-insecure-v3l$$=sf1-cg#$3_=emhr1_0llb=7mu4+xgr+xlw!^pap6axg+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
+#VK_APP_ID = '51733520'
+#VKONTAKTE_APP_ID = VK_APP_ID
+#VK_API_SECRET = '1PO3DAMmiPneSKkJvIGD'
+#VKONTAKTE_APP_SECRET = VK_API_SECRET
+
+
+#SOCIALACCOUNT_PROVIDERS = {
+    #'vk': {
+#             'APP': {
+#                 'client_id': 'App ID',
+#                 'secret': 'Secure Key',
+#                 'key': ''
+#                    }
+#           }
+# },
 
 # Application definition
 
@@ -38,11 +53,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'django.contrib.sites',
+    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    #'allauth.socialaccount.models.SocialApp',
 
     'django_filters',
 
-    # 'django.contrib.sites',
-    # 'django.contrib.flatpages',
+    #'django.contrib.flatpages',
+    #'allauth.socialaccount.providers.google',
+    #'allauth.socialaccount.providers.vk',
 
     'news',
     'accounts',
@@ -60,20 +82,23 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'NewsPaper.urls'
 
+SITE_ID = 1
+
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
+   {
+       'BACKEND': 'django.template.backends.django.DjangoTemplates',
+       'DIRS': [os.path.join(BASE_DIR, 'templates')], # Модуль os должен быть импортирован выше
+       'APP_DIRS': True,
+       'OPTIONS': {
+           'context_processors': [
+               'django.template.context_processors.debug',
+               # `allauth` needs this from django
+               'django.template.context_processors.request',
+               'django.contrib.auth.context_processors.auth',
+               'django.contrib.messages.context_processors.messages',
+           ],
+       },
+   },
 ]
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
@@ -108,6 +133,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+   # Needed to login by username in Django admin, regardless of `allauth`
+   'django.contrib.auth.backends.ModelBackend',
+  
+   # `allauth` specific authentication methods, such as login by e-mail
+   'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -131,6 +164,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# SITE_ID = 1
+LOGIN_REDIRECT_URL = '/admin'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/accounts/login/'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
