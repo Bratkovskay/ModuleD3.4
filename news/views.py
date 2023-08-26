@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .forms import AddPostForm
 from .models import Post
@@ -34,14 +35,16 @@ class PostSearch(ListView):
         return context
 
 
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
     template_name = 'post_create.html'
     form_class = AddPostForm
+    permission_required = ('news.add_post')
 
 
-class PostUpdate(LoginRequiredMixin, UpdateView):
+class PostUpdate(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'post_create.html'
     form_class = AddPostForm
+    permission_required = ('news.change_post')
 
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
