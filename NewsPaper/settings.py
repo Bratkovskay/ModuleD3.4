@@ -175,4 +175,4 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-ACCOUNT_FORMS = {'/accounts/signup/': 'sign.forms.BasicSignupForm'}
+ACCOUNT_FORMS = {'/accounts/signup/': 'NewsPaper.forms.BasicSignupForm'}
